@@ -1,6 +1,9 @@
 from configparser import ConfigParser
+from os import path
 
-from ProjVar.workvar import Config_path
+from ProjVar.var import ProjDirPath
+
+Config_path = path.join(ProjDirPath, 'Conf', 'config.ini')
 
 
 def getConfigValue(section: str, valueKey: str):

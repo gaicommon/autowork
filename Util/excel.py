@@ -53,11 +53,11 @@ class Excel:
 
     def get_excel_value_list(self, row_no):
         row = self.get_row(row_no)
-        row_value_list = []
+        row_value_dic = {}
         if self.column_num:
             for i in range(self.column_num):
-                row_value_list.append((i, row[i].value))
-        return row_value_list
+                row_value_dic[row[i].value]=i
+        return row_value_dic
 
     # 获取某一列对象，第一列从0开始
     def get_col(self, col_no):
