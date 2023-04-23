@@ -10,7 +10,17 @@ def get_info_from_channel_code(channel_code: str):
 
 
 def str_to_list(list_str: str):
-    return re.split(',|，|;|；|\n')
+    return re.split(',|，|;|；|\n', list_str)
+
+
+def get_attachment_dic_list(attach_str):
+    attach_list = str_to_list(attach_str)
+    attachment_list =[]
+    if attach_list:
+        for att in attach_list:
+            attach_dic = {"code": att, "filepath": "", "is_sys_file": True}
+            attachment_list.append(attach_dic)
+    return attachment_list
 
 
 if __name__ == "__main__":

@@ -1,8 +1,7 @@
-from selenium import webdriver
 
+from DataModel.drcs import DRCS,getUnreviewDocument
 
 if __name__ =="__main__":
-    driver = webdriver.Ie(r'./driver/IEDriverServer.exe')
-    driver.get(r'http://www.baidu.com')
+    excel_path = "projectdocument_EHEC.xlsx"
+    getUnreviewDocument(excel_path)
 
-    print('打开成功')

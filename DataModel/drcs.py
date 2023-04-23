@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from os import path
 from Util.excel import Excel
 from ProjVar.workvar import WorkData_path, Sender_name
-from ProjVar.work_regular import get_info_from_channel_code, str_to_list
+from ProjVar.work_regular import get_info_from_channel_code, str_to_list, get_attachment_dic_list
 
 
 @dataclass
@@ -44,21 +44,20 @@ def doc_dic(attr_dic,row):
                     "common": row[attr_dic['drcs_opinion']].value}
     return document_dic
 
-def getDrcsListByExcel(excel: Excel):
+def get_unreview_doc_list(excel: Excel):
     drcs_dic = {}
 
     attr_dic = excel.get_excel_value_list(0)
     print(attr_dic)
     for row in excel.sheet.iter_rows(min_row=2):
-        drcs_channel = row[attr_dic["drcs_channel"]].value.strip()
+        drcs_channel = row[attr_dic["drcs_channel"]].value
         is_reviewed = row[attr_dic["is_reviewed"]].value
         channel_code = row[attr_dic["channel_code"]].value
-        if not drcs_channel or not is_reviewed or drcs_channel:
+        if not channel_code or not is_reviewed or drcs_channel:
             continue
-        if drcs_dic.has_key(drcs_channel):
-
+        if drcs_channel in drcs_dic.keys():
             drcs_dic[drcs_channel].document_list.append(doc_dic(attr_dic,row))
-            drcs_dic[drcs_channel].attachment_list += str_to_list(row[attr_dic['idrs_channel']].value)
+            drcs_dic[drcs_channel].attachment_list += get_attachment_dic_list(row[attr_dic['idrs_channel']].value)
         else:
             drcs = DRCS()
             drcs.channel_code = channel_code
@@ -73,12 +72,12 @@ def getDrcsListByExcel(excel: Excel):
             drcs.approver_code = row[attr_dic['approver_code']].value
             drcs.checker_code = row[attr_dic['checker_code']].value
             drcs.drafter_code = row[attr_dic['drafter_code']].value
-            drcs.attachment_list = str_to_list(row[attr_dic['idrs_channel']].value)
+            drcs.attachment_list = get_attachment_dic_list(row[attr_dic['idrs_channel']].value)
             drcs.sender_name = Sender_name
             drcs.drcs_opinion = row[attr_dic['drcs_opinion']].value
             drcs.document_list = []
             drcs.document_list.append(doc_dic(attr_dic, row))
-            drcs_dic[drcs_channel] = drcs
+            drcs_dic[channel_code] = drcs
 
     return drcs_dic
 
@@ -100,12 +99,15 @@ def getUnreviewDocument(excel_fileName):
     excel = Excel(excel_path)
     sheet_names = excel.get_all_sheet_names()
     # 获取文件列表
+    un_review_document_dic = {}
     for name in sheet_names:
         if 'doc' in name:
             excel.sheet = excel.wb[name]
             excel.column_num = excel.sheet.max_column
             excel.row_num = excel.sheet.max_row
-            drcs_dic = getDrcsListByExcel(excel)
+            drcs_dic_list = get_unreview_doc_list(excel)
+            un_review_document_dic[name] = drcs_dic_list
+    return {"excel":excel, "doc_list":un_review_document_dic}
 
 
 if __name__ == "__main__":
