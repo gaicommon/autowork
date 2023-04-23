@@ -99,18 +99,4 @@ class Excel:
 
 
 if __name__ == "__main__":
-    excel_file_path = ProjDirPath + r"\TestData\126邮箱联系人.xlsx"
-    # print(excel_file_path )
-    excel_obj = Excel(excel_file_path)
-    # Excel("e:\\a.xlsx")    #测试路劲不存在的情况
-    # excel_obj.set_sheet_by_name("测试邮件")
-    # excel_obj.set_sheet_by_name("测试邮件1111")
-    excel_obj.set_sheet_by_index(1)
-    # print(excel_obj.get_current_sheet_name())
-    # excel_obj.set_sheet_by_index(5)
-    # print(excel_obj.get_rows_object())
-    # print(excel_obj.get_cols_object())
-    # print(excel_obj.get_row(2))
-    print(excel_obj.get_cell_value(2, 2))
-    print(excel_obj.write_cell_value(5, 7, "hello~~"))
-    print(excel_obj.write_current_time(6, 8))
+    pass

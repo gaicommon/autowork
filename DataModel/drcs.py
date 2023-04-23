@@ -105,7 +105,7 @@ def getUnreviewDocument(excel_fileName):
             excel.sheet = excel.wb[name]
             excel.column_num = excel.sheet.max_column
             excel.row_num = excel.sheet.max_row
-            drcs_list = getDrcsListByExcel(excel)
+            drcs_dic = getDrcsListByExcel(excel)
 
 
 if __name__ == "__main__":
